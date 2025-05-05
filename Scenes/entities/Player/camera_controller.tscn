@@ -1,9 +1,15 @@
-[gd_scene load_steps=2 format=3 uid="uid://hufjexemv2gp"]
+[gd_scene load_steps=3 format=3 uid="uid://hufjexemv2gp"]
 
 [ext_resource type="Script" uid="uid://b7txposi8tdsd" path="res://Scenes/entities/Player/camera_controller.gd" id="1_huoed"]
 
-[node name="CameraController" type="Node3D"]
+[sub_resource type="SphereShape3D" id="SphereShape3D_huoed"]
+
+[node name="CameraController" type="SpringArm3D"]
+shape = SubResource("SphereShape3D_huoed")
+spring_length = 6.5
 script = ExtResource("1_huoed")
+min_limit_x = -0.8
+max_limit_x = -0.2
 
 [node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.93925, 0.343234, 0, -0.343234, 0.93925, 0.0121801, 3.55907, 5.47815)
+current = true
