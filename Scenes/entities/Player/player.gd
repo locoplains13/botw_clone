@@ -24,23 +24,34 @@ func _physics_process(delta: float) -> void:
 func move_logic(delta) -> void:
 	movement_input = Input.get_vector("left", "right", "forward", "backward").rotated(-camera.global_rotation.y)
 	var vel_2d = Vector2(velocity.x, velocity.z)
-	var is_running := Input.is_action_pressed("run")
 	
-	if movement_input != Vector2.ZERO:
-		var speed = run_speed if is_running else base_speed
+	var is_running := Input.is_action_pressed("run") ## to check if the player is pressing the run button
+	
+	#if input is detected, then move the player
+	if movement_input != Vector2.ZERO: 
+		var speed = run_speed if is_running else base_speed ## make default speed equal to run_speed if var is true, otherwise, keep base_speed
 		vel_2d += movement_input * speed * delta
 		vel_2d = vel_2d.limit_length(speed)
 		velocity.x = vel_2d.x
 		velocity.z = vel_2d.y
-		print("running at "+ str(vel_2d))
-	else:
+		print("moving")
+		$GodetteSkin.set_move_state("Running_B")
+		var target_angle = -movement_input.angle() + PI/2
+		$GodetteSkin.rotation.y = rotate_toward($GodetteSkin.rotation.y, target_angle, 7 * delta)
+	else: 
+		## if the player isn't moving
 		vel_2d = vel_2d.move_toward(Vector2.ZERO, base_speed * 4.0 * delta)
 		velocity.x = vel_2d.x
 		velocity.z = vel_2d.y
+		$GodetteSkin.set_move_state("Idle")
+		print("idle")
 
 func jump_logic(delta: float) -> void:
-	if is_on_floor():	
+	if is_on_floor():
 		if Input.is_action_just_pressed("jump"):
 			velocity.y = -jump_velocity
-	var gravity = jump_gravity if velocity.y > 0.0 else fall_gravity
-	velocity.y -= gravity * delta
+	else:
+		$GodetteSkin.set_move_state("Jump_Idle")
+		print("jumping")
+		var gravity = jump_gravity if velocity.y > 0.0 else fall_gravity
+		velocity.y -= gravity * delta
