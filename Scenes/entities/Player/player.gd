@@ -4,7 +4,7 @@ extends CharacterBody3D
 @export var run_speed := 8
 
 @onready var camera = $CameraController/Camera3D
-
+@onready var skin = $GodetteSkin
 #jump
 @export var jump_height : float = 2.25
 @export var jump_time_to_peak : float = 0.4
@@ -19,6 +19,7 @@ var movement_input := Vector2.ZERO
 func _physics_process(delta: float) -> void:
 	move_logic(delta)
 	jump_logic(delta)
+	ability_logic()
 	move_and_slide()
 
 func move_logic(delta) -> void:
@@ -34,24 +35,26 @@ func move_logic(delta) -> void:
 		vel_2d = vel_2d.limit_length(speed)
 		velocity.x = vel_2d.x
 		velocity.z = vel_2d.y
-		print("moving")
-		$GodetteSkin.set_move_state("Running_B")
+		skin.set_move_state("Running_B")
 		var target_angle = -movement_input.angle() + PI/2
-		$GodetteSkin.rotation.y = rotate_toward($GodetteSkin.rotation.y, target_angle, 7 * delta)
+		skin.rotation.y = rotate_toward(skin.rotation.y, target_angle, 7 * delta)
 	else: 
 		## if the player isn't moving
 		vel_2d = vel_2d.move_toward(Vector2.ZERO, base_speed * 4.0 * delta)
 		velocity.x = vel_2d.x
 		velocity.z = vel_2d.y
-		$GodetteSkin.set_move_state("Idle")
-		print("idle")
+		skin.set_move_state("Idle")
 
 func jump_logic(delta: float) -> void:
+	## if player is on the floor and presses jump, make player move up
 	if is_on_floor():
 		if Input.is_action_just_pressed("jump"):
 			velocity.y = -jump_velocity
 	else:
-		$GodetteSkin.set_move_state("Jump_Idle")
-		print("jumping")
-		var gravity = jump_gravity if velocity.y > 0.0 else fall_gravity
+		skin.set_move_state("Jump_Idle")
+		var gravity = jump_gravity if velocity.y > 0.0 else fall_gravity #player will fall with gravity if they reach the peak
 		velocity.y -= gravity * delta
+
+func ability_logic() -> void:
+	if Input.is_action_just_pressed("ability"):
+		skin.attack()
