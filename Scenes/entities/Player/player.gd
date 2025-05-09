@@ -2,6 +2,7 @@ extends CharacterBody3D
 
 @export var base_speed := 5
 @export var run_speed := 8
+@export var defend_speed := 3
 
 @onready var camera = $CameraController/Camera3D
 @onready var skin = $GodetteSkin
@@ -15,6 +16,13 @@ extends CharacterBody3D
 @onready var fall_gravity : float = ((-2.0 * jump_height) / (jump_time_to_descent * jump_time_to_descent)) * -1.0
 
 var movement_input := Vector2.ZERO
+var defend := false:
+	set(value):
+		if not defend and value:
+			skin.defend(true)
+		if defend and not value:
+			skin.defend(false)
+		defend = value
 
 func _physics_process(delta: float) -> void:
 	move_logic(delta)
@@ -31,6 +39,7 @@ func move_logic(delta) -> void:
 	#if input is detected, then move the player
 	if movement_input != Vector2.ZERO: 
 		var speed = run_speed if is_running else base_speed ## make default speed equal to run_speed if var is true, otherwise, keep base_speed
+		speed = defend_speed if defend else speed
 		vel_2d += movement_input * speed * delta
 		vel_2d = vel_2d.limit_length(speed)
 		velocity.x = vel_2d.x
@@ -58,3 +67,5 @@ func jump_logic(delta: float) -> void:
 func ability_logic() -> void:
 	if Input.is_action_just_pressed("ability"):
 		skin.attack()
+	
+	defend = Input.is_action_pressed("block")

@@ -13,6 +13,6 @@ func rotate_from_vector(v: Vector2):
 	
 	## changing to -= makes camera controls inverted
 	
-	rotation.y += v.x 
+	rotation.y -= v.x 
 	rotation.x += v.y
 	rotation.x = clamp(rotation.x, min_limit_x, max_limit_x)
