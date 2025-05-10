@@ -41,7 +41,7 @@ func move_logic(delta) -> void:
 	var is_running := Input.is_action_pressed("run") ## to check if the player is pressing the run button
 	
 	#if input is detected, then move the player
-	if movement_input != Vector2.ZERO: 
+	if movement_input != Vector2.ZERO:
 		var speed = run_speed if is_running else base_speed ## make default speed equal to run_speed if var is true, otherwise, keep base_speed
 		speed = defend_speed if defend else speed
 		vel_2d += movement_input * speed * delta * 8.0
