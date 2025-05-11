@@ -13,8 +13,8 @@ dest_files=["res://.godot/imported/Skeleton_Mage.glb-532f75580acf046805f3eaaeffe
 
 [params]
 
-nodes/root_type=""
-nodes/root_name=""
+nodes/root_type="Node"
+nodes/root_name="mage_skin"
 nodes/apply_root_scale=true
 nodes/root_scale=1.0
 nodes/import_as_skeleton_bones=false

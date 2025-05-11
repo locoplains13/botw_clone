@@ -59,7 +59,7 @@ func hit() -> void:
 	$AnimationTree.set("parameters/ExtraOneShot/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
 	$AnimationTree.set("parameters/AttackOneShot/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_ABORT)
 	attacking = false
-	await get_tree().create_timer(0.5).timeout
+	await get_tree().create_timer(0.7).timeout
 	change_face('default')
 
 func change_face(expression):
